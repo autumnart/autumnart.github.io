@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="laravel路由"/>
+
+
+
+
+  <meta name="keywords" content="php,laravel," />
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Qiu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.1.0" />
+
+
+
+<link rel="canonical" href="/2017/01/07/laravel-route/"/>
+
+
+<meta name="description" content="路由是将请求对应到处理的action中，laravel中的路由强大且灵活，一个工程可以没有controller，view，model但不能没有route。route都定义在routes文件夹下可以说这个就是整个应用的入口，最新版中route默认被划分成3类
+
+web：定义web界面，包括cookie session csrf等中间件
+api：无状态的路由，不做session处理，限制访问频率
+co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="laravel路由">
+<meta property="og:url" content="/2017/01/07/laravel-route/index.html">
+<meta property="og:site_name" content="Qiu">
+<meta property="og:description" content="路由是将请求对应到处理的action中，laravel中的路由强大且灵活，一个工程可以没有controller，view，model但不能没有route。route都定义在routes文件夹下可以说这个就是整个应用的入口，最新版中route默认被划分成3类
+
+web：定义web界面，包括cookie session csrf等中间件
+api：无状态的路由，不做session处理，限制访问频率
+co">
+<meta property="og:updated_time" content="2017-01-07T14:33:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="laravel路由">
+<meta name="twitter:description" content="路由是将请求对应到处理的action中，laravel中的路由强大且灵活，一个工程可以没有controller，view，model但不能没有route。route都定义在routes文件夹下可以说这个就是整个应用的入口，最新版中route默认被划分成3类
+
+web：定义web界面，包括cookie session csrf等中间件
+api：无状态的路由，不做session处理，限制访问频率
+co">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.0" />
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+
+
+  
+
+
+
+    <title> laravel路由 · Qiu </title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="header" class="header"><nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+          </a>
+        </li>
+      
+      
+    </ul>
+  
+</nav>
+
+<div class="mobile-navbar">
+  <div class="mobile-header">
+    <div class="mobile-header-logo">
+      <a href="/." class="logo">Qiu</a>
+    </div>
+
+    <div class="mobile-header-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    
+      
+      <a class="mobile-menu-item" href="/">
+        Home
+      </a>
+    
+      
+      <a class="mobile-menu-item" href="/archives/">
+        Archives
+      </a>
+    
+  </nav>
+</div>
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          laravel路由
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          Jan 7, 2017
+        </span>
+      </div>
+    </header>
+
+    
+      <div class="post-toc" id="post-toc">
+        <h2 class="post-toc-title">Contents</h2>
+        <div class="post-toc-content">
+          <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本使用"><span class="toc-text">基本使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#路由参数"><span class="toc-text">路由参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数验证与命名"><span class="toc-text">参数验证与命名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用数组方式"><span class="toc-text">使用数组方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#group分组"><span class="toc-text">group分组</span></a></li></ol>
+        </div>
+      </div>
+    
+
+    <div class="post-content">
+      
+        <p>路由是将请求对应到处理的action中，laravel中的路由强大且灵活，一个工程可以没有controller，view，model但不能没有route。route都定义在routes文件夹下可以说这个就是整个应用的入口，最新版中route默认被划分成3类</p>
+<ol>
+<li>web：定义web界面，包括cookie session csrf等中间件</li>
+<li>api：无状态的路由，不做session处理，限制访问频率</li>
+<li>console：这个和web无关而是关联artisan命令行</li>
+</ol>
+<h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><p>最简单的route定义:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'foo'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'foo bar'</span>;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>其他http方法<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Route::get($uri, $callback);</div><div class="line">Route::post($uri, $callback);</div><div class="line">Route::put($uri, $callback);</div><div class="line">Route::patch($uri, $callback);</div><div class="line">Route::delete($uri, $callback);</div><div class="line">Route::options($uri, $callback);</div></pre></td></tr></table></figure></p>
+<p>还可以使用match匹配多个方法与any匹配所有的方法<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Route::match([<span class="string">'get'</span>, <span class="string">'post'</span>], $uri, $callback);</div><div class="line">Route::any($uri, $callback);</div></pre></td></tr></table></figure></p>
+<h3 id="路由参数"><a href="#路由参数" class="headerlink" title="路由参数"></a>路由参数</h3><p>定义匹配某些规则的路由比如：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'hello/&#123;name&#125;'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($name)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'hello '</span>.$name;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>一般情况下我们都以分割线为单位进行匹配<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'post/&#123;post&#125;/comment/&#123;comment&#125;'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($post, $comment)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'comment: '</span>.$comment.<span class="string">' post:'</span>.$post;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>或者我们使用它来匹配返回类型<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'post/&#123;post&#125;.&#123;type&#125;'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($post, $type)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> ($type === <span class="string">'json'</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'i am json post'</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ($type === <span class="string">'html'</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'i am html post'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>当参数后面加‘?’时表示这个参数是可选的，但是需要注意匹配顺序<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'hello/&#123;name?&#125;'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($name = <span class="string">'world'</span>)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'hello '</span>.$name;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<h3 id="参数验证与命名"><a href="#参数验证与命名" class="headerlink" title="参数验证与命名"></a>参数验证与命名</h3><p>前面的路由参数还可以使用where方法加正则验证，如果验证失败那么不匹配<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'post/&#123;post&#125;'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($post)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> $post.<span class="string">' is int'</span>;</div><div class="line">&#125;)-&gt;where(<span class="string">'post'</span>, <span class="string">'\d+'</span>); <span class="comment">// 只匹配数字</span></div></pre></td></tr></table></figure></p>
+<p>可以给某个路由取名字，有名字的路由可以通过route方法使用<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'foo'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> route(<span class="string">'bar'</span>); <span class="comment">// 返回整个url</span></div><div class="line">&#125;)-&gt;name(<span class="string">'bar'</span>);</div></pre></td></tr></table></figure></p>
+<h3 id="使用数组方式"><a href="#使用数组方式" class="headerlink" title="使用数组方式"></a>使用数组方式</h3><p>上面的name还可以通过给第二个参数传递数组的方式<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'foo'</span>, [</div><div class="line">    <span class="string">'as'</span> =&gt; <span class="string">'bar'</span>,</div><div class="line">    <span class="string">'uses'</span> =&gt; <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> route(<span class="string">'bar'</span>); <span class="comment">// 返回整个url</span></div><div class="line">    &#125;</div><div class="line">])-&gt;name(<span class="string">'bar'</span>);</div></pre></td></tr></table></figure></p>
+<p>数组可传参数有middleware，prefix，as等同于name，uses等同于要使用的action</p>
+<h3 id="group分组"><a href="#group分组" class="headerlink" title="group分组"></a>group分组</h3><p>laravel可以给路由分组，可配置相同组的namespace，prefix，as，where<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Route::group([<span class="string">'prefix'</span> =&gt; <span class="string">'admin'</span>, <span class="string">'as'</span> =&gt; <span class="string">'admin'</span>], <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">    Route::get(<span class="string">'users'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">// 匹配 "/admin/users" URL</span></div><div class="line">    &#125;);</div><div class="line">    Route::get(<span class="string">'posts'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> route(<span class="string">'adminposts'</span>);</div><div class="line">    &#125;)-&gt;(<span class="string">'posts'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>上面是路由的基本用法 其中还有很多高级的使用方法在后面的教程中会一一讲到</p>
+
+      
+    </div>
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/php/">php</a>
+          
+            <a href="/tags/laravel/">laravel</a>
+          
+        </div>
+
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2016/11/21/learn-laravel/">
+        <span class="next-text nav-default">学习laravel系列教程</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+        </div>  
+      </main>
+
+      <footer id="footer" class="footer">
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">qiu</span>
+  </span>
+</div>
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+
+
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.1.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.0"></script>
+
+  </body>
+</html>
