@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="laravel控制器"/>
+
+
+
+
+  <meta name="keywords" content="php,laravel," />
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Qiu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.1.0" />
+
+
+
+<link rel="canonical" href="/2017/01/15/laravel-controller/"/>
+
+
+<meta name="description" content="首先说一下什么是控制器，在route里面讲到laravel的每一个请求都对应一个action，当然我们把逻辑都写在routes文件夹中显然是不合理的，通常我们将一系列类似功能的action放在一个控制器中。123456789101112131415161718namespace App\Http\Controllers;use App\User;use App\Http\Controllers\C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="laravel控制器">
+<meta property="og:url" content="/2017/01/15/laravel-controller/index.html">
+<meta property="og:site_name" content="Qiu">
+<meta property="og:description" content="首先说一下什么是控制器，在route里面讲到laravel的每一个请求都对应一个action，当然我们把逻辑都写在routes文件夹中显然是不合理的，通常我们将一系列类似功能的action放在一个控制器中。123456789101112131415161718namespace App\Http\Controllers;use App\User;use App\Http\Controllers\C">
+<meta property="og:updated_time" content="2017-01-15T16:01:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="laravel控制器">
+<meta name="twitter:description" content="首先说一下什么是控制器，在route里面讲到laravel的每一个请求都对应一个action，当然我们把逻辑都写在routes文件夹中显然是不合理的，通常我们将一系列类似功能的action放在一个控制器中。123456789101112131415161718namespace App\Http\Controllers;use App\User;use App\Http\Controllers\C">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.0" />
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a012f1b343df2bf6b74279e6178044ab";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> laravel控制器 · Qiu </title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="header" class="header"><nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+          </a>
+        </li>
+      
+      
+    </ul>
+  
+</nav>
+
+<div class="mobile-navbar">
+  <div class="mobile-header">
+    <div class="mobile-header-logo">
+      <a href="/." class="logo">Qiu</a>
+    </div>
+
+    <div class="mobile-header-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    
+      
+      <a class="mobile-menu-item" href="/">
+        Home
+      </a>
+    
+      
+      <a class="mobile-menu-item" href="/archives/">
+        Archives
+      </a>
+    
+  </nav>
+</div>
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          laravel控制器
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          Jan 15, 2017
+        </span>
+      </div>
+    </header>
+
+    
+      <div class="post-toc" id="post-toc">
+        <h2 class="post-toc-title">Contents</h2>
+        <div class="post-toc-content">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#控制器基类"><span class="toc-text">控制器基类</span></a></li></ol>
+        </div>
+      </div>
+    
+
+    <div class="post-content">
+      
+        <p>首先说一下什么是控制器，在route里面讲到laravel的每一个请求都对应一个action，当然我们把逻辑都写在routes文件夹中显然是不合理的，通常我们将一系列类似功能的action放在一个控制器中。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">User</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>\<span class="title">Controller</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 为指定用户显示详情</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> int $id</div><div class="line">     * <span class="doctag">@return</span> Response</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">showProfile</span><span class="params">($id)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> view(<span class="string">'user.profile'</span>, [<span class="string">'user'</span> =&gt; User::findOrFail($id)]);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后指定路由<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'user/&#123;id&#125;'</span>, <span class="string">'UserController@showProfile'</span>);</div></pre></td></tr></table></figure></p>
+<p>路由的基本使用方法和resource路由以及自动注册路由可以参考<a href="https://laravel.com/docs/5.3/controllers" target="_blank" rel="external">官方api</a> 这里我们不详细说明</p>
+<h2 id="控制器基类"><a href="#控制器基类" class="headerlink" title="控制器基类"></a>控制器基类</h2><p>laravel为每个应用生成了一个controller基类<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Bus</span>\<span class="title">DispatchesJobs</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Routing</span>\<span class="title">Controller</span> <span class="title">as</span> <span class="title">BaseController</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Validation</span>\<span class="title">ValidatesRequests</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Auth</span>\<span class="title">Access</span>\<span class="title">AuthorizesRequests</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Controller</span> <span class="keyword">extends</span> <span class="title">BaseController</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">use</span> <span class="title">AuthorizesRequests</span>, <span class="title">DispatchesJobs</span>, <span class="title">ValidatesRequests</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这个基类使用了AuthorizesRequests, DispatchesJobs, ValidatesRequests三个trait 其中ValidatesRequests这个trait实现了我们上一章说的表单验证功能 我们可以在方法中调用<code>$this-&gt;validate</code>方法跟我们之前的<code>Validator::make</code>是相同的 AuthorizesRequests实现用户认证 DispatchesJobs实现任务队列</p>
+
+      
+    </div>
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/php/">php</a>
+          
+            <a href="/tags/laravel/">laravel</a>
+          
+        </div>
+
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/01/14/laravel-form-validate/">
+        <span class="next-text nav-default">laravel表单验证</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+        </div>  
+      </main>
+
+      <footer id="footer" class="footer">
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">qiu</span>
+  </span>
+</div>
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+
+
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.1.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.0"></script>
+
+  </body>
+</html>

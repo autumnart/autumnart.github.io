@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="laravel表单验证"/>
+
+
+
+
+  <meta name="keywords" content="php,laravel," />
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Qiu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.1.0" />
+
+
+
+<link rel="canonical" href="/2017/01/14/laravel-form-validate/"/>
+
+
+<meta name="description" content="http应用离不开表单，而表单验证尤其其中最复杂的一部分，好在laravel为我们提供了一个非常强大的表单验证功能首先我们使用Validator::make创建一个验证器123456$validator = Validator::make($request-&amp;gt;all(), [    &apos;title&apos; =&amp;gt; &apos;required|unique:posts|max:255&apos;,    &apos;body">
+<meta property="og:type" content="article">
+<meta property="og:title" content="laravel表单验证">
+<meta property="og:url" content="/2017/01/14/laravel-form-validate/index.html">
+<meta property="og:site_name" content="Qiu">
+<meta property="og:description" content="http应用离不开表单，而表单验证尤其其中最复杂的一部分，好在laravel为我们提供了一个非常强大的表单验证功能首先我们使用Validator::make创建一个验证器123456$validator = Validator::make($request-&amp;gt;all(), [    &apos;title&apos; =&amp;gt; &apos;required|unique:posts|max:255&apos;,    &apos;body">
+<meta property="og:updated_time" content="2017-01-15T15:19:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="laravel表单验证">
+<meta name="twitter:description" content="http应用离不开表单，而表单验证尤其其中最复杂的一部分，好在laravel为我们提供了一个非常强大的表单验证功能首先我们使用Validator::make创建一个验证器123456$validator = Validator::make($request-&amp;gt;all(), [    &apos;title&apos; =&amp;gt; &apos;required|unique:posts|max:255&apos;,    &apos;body">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.0" />
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a012f1b343df2bf6b74279e6178044ab";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> laravel表单验证 · Qiu </title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="header" class="header"><nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+          </a>
+        </li>
+      
+      
+    </ul>
+  
+</nav>
+
+<div class="mobile-navbar">
+  <div class="mobile-header">
+    <div class="mobile-header-logo">
+      <a href="/." class="logo">Qiu</a>
+    </div>
+
+    <div class="mobile-header-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    
+      
+      <a class="mobile-menu-item" href="/">
+        Home
+      </a>
+    
+      
+      <a class="mobile-menu-item" href="/archives/">
+        Archives
+      </a>
+    
+  </nav>
+</div>
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          laravel表单验证
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          Jan 14, 2017
+        </span>
+      </div>
+    </header>
+
+    
+      <div class="post-toc" id="post-toc">
+        <h2 class="post-toc-title">Contents</h2>
+        <div class="post-toc-content">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#表单验证错误处理"><span class="toc-text">表单验证错误处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FormRequest"><span class="toc-text">FormRequest</span></a></li></ol>
+        </div>
+      </div>
+    
+
+    <div class="post-content">
+      
+        <p>http应用离不开表单，而表单验证尤其其中最复杂的一部分，好在laravel为我们提供了一个非常强大的表单验证功能<br>首先我们使用Validator::make创建一个验证器<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$validator = Validator::make($request-&gt;all(), [</div><div class="line">    <span class="string">'title'</span> =&gt; <span class="string">'required|unique:posts|max:255'</span>,</div><div class="line">    <span class="string">'body'</span> =&gt; <span class="string">'required'</span>,</div><div class="line">]);</div><div class="line">$validator-&gt;fails(); <span class="comment">// 验证失败</span></div><div class="line">$validator-&gt;passes(); <span class="comment">// 验证通过</span></div></pre></td></tr></table></figure></p>
+<p>上面的验证失败和验证通过调用其中一个就可以<br>通过<code>$validator-&gt;errors()</code>或者<code>$validator-&gt;getMessageBag()</code>可以返回错误信息，其是一个MessageBug实例</p>
+<p>如果要自定义messages可以使用第三个参数<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$messages = [</div><div class="line">    <span class="string">'required'</span> =&gt; <span class="string">'The :attribute field is required.'</span>,</div><div class="line">];</div></pre></td></tr></table></figure></p>
+<p>具体的规则和消息可以参考<a href="https://laravel.com/docs/5.3/validation" target="_blank" rel="external">官方api</a></p>
+<h2 id="表单验证错误处理"><a href="#表单验证错误处理" class="headerlink" title="表单验证错误处理"></a>表单验证错误处理</h2><p>规则和使用方法在官网已经说的很清楚了 这里说laravel对表单验证的流程。<br>首先是当我们调用<code>$validator-&gt;validate()</code>的时候如果验证不通过那么会抛出一个<code>\Illuminate\Validation\ValidationException</code>的异常<br>在laravel的ExceptionHandler中如果捕获到对应的异常那么做如下处理<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ($e-&gt;response) &#123;</div><div class="line">    <span class="keyword">return</span> $e-&gt;response;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$errors = $e-&gt;validator-&gt;errors()-&gt;getMessages();</div><div class="line"></div><div class="line"><span class="keyword">if</span> ($request-&gt;expectsJson()) &#123;</div><div class="line">    <span class="keyword">return</span> response()-&gt;json($errors, <span class="number">422</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">return</span> redirect()-&gt;back()-&gt;withInput($request-&gt;input())-&gt;withErrors($errors);</div></pre></td></tr></table></figure></p>
+<p>可以看到如果是ajax请求 那么返回状态码422并返回error的json信息</p>
+<h2 id="FormRequest"><a href="#FormRequest" class="headerlink" title="FormRequest"></a>FormRequest</h2><p>在laravel中除了使用validator之外 还可以使用<code>Illuminate\Foundation\Http\FormRequest</code>进行表单验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">?php</div><div class="line"></div><div class="line">namespace App\Http\Requests;</div><div class="line"></div><div class="line">use Illuminate\Foundation\Http\FormRequest;</div><div class="line"></div><div class="line">class BlogRequest extends FormRequest</div><div class="line">&#123;</div><div class="line">    /**</div><div class="line">     * Get the validation rules that apply to the request.</div><div class="line">     *</div><div class="line">     * @return array</div><div class="line">     */</div><div class="line">    public function rules()</div><div class="line">    &#123;</div><div class="line">        return [</div><div class="line">            &apos;title&apos; =&gt; &apos;required|unique:posts|max:255&apos;,</div><div class="line">            &apos;body&apos; =&gt; &apos;required&apos;,</div><div class="line">        ];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">Route::post(&apos;blog&apos;, function (BlogRequest $request) &#123;</div><div class="line">    return response()-&gt;json(true);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>FormRequest继承自Request 同时实现了<code>Illuminate\Contracts\Validation\ValidatesWhenResolved</code>接口，当laravel通过以来注入获取一个FormRequest时，会自动调用FormRequest的validate方法，从而进行验证，其逻辑与validate相同</p>
+
+      
+    </div>
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/php/">php</a>
+          
+            <a href="/tags/laravel/">laravel</a>
+          
+        </div>
+
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/01/15/laravel-controller/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">laravel控制器</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/01/08/laravel-request-response/">
+        <span class="next-text nav-default">laravel请求响应和中间件</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+        </div>  
+      </main>
+
+      <footer id="footer" class="footer">
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">qiu</span>
+  </span>
+</div>
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+
+
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.1.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.0"></script>
+
+  </body>
+</html>

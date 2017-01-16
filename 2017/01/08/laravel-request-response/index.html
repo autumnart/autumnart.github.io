@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="laravel请求响应和中间件"/>
+
+
+
+
+  <meta name="keywords" content="php,laravel," />
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Qiu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.1.0" />
+
+
+
+<link rel="canonical" href="/2017/01/08/laravel-request-response/"/>
+
+
+<meta name="description" content="每一个web frame框架都是使用Request和Response模型 laravel也不例外。还记得在路由章节我们的route方法返回了一个字符串，实际上laravel帮你做了封装
+请求首先任何一个请求对于laravel来说都是一个Request对象，他是基于$_GET和$_POST等的封装，提供了更多的功能 在action中我们使用依赖注入来获取Request对象
+123Route::get">
+<meta property="og:type" content="article">
+<meta property="og:title" content="laravel请求响应和中间件">
+<meta property="og:url" content="/2017/01/08/laravel-request-response/index.html">
+<meta property="og:site_name" content="Qiu">
+<meta property="og:description" content="每一个web frame框架都是使用Request和Response模型 laravel也不例外。还记得在路由章节我们的route方法返回了一个字符串，实际上laravel帮你做了封装
+请求首先任何一个请求对于laravel来说都是一个Request对象，他是基于$_GET和$_POST等的封装，提供了更多的功能 在action中我们使用依赖注入来获取Request对象
+123Route::get">
+<meta property="og:image" content="/middleware.png">
+<meta property="og:updated_time" content="2017-01-14T06:05:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="laravel请求响应和中间件">
+<meta name="twitter:description" content="每一个web frame框架都是使用Request和Response模型 laravel也不例外。还记得在路由章节我们的route方法返回了一个字符串，实际上laravel帮你做了封装
+请求首先任何一个请求对于laravel来说都是一个Request对象，他是基于$_GET和$_POST等的封装，提供了更多的功能 在action中我们使用依赖注入来获取Request对象
+123Route::get">
+<meta name="twitter:image" content="/middleware.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.0" />
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a012f1b343df2bf6b74279e6178044ab";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> laravel请求响应和中间件 · Qiu </title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="header" class="header"><nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+          </a>
+        </li>
+      
+      
+    </ul>
+  
+</nav>
+
+<div class="mobile-navbar">
+  <div class="mobile-header">
+    <div class="mobile-header-logo">
+      <a href="/." class="logo">Qiu</a>
+    </div>
+
+    <div class="mobile-header-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    
+      
+      <a class="mobile-menu-item" href="/">
+        Home
+      </a>
+    
+      
+      <a class="mobile-menu-item" href="/archives/">
+        Archives
+      </a>
+    
+  </nav>
+</div>
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          laravel请求响应和中间件
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          Jan 8, 2017
+        </span>
+      </div>
+    </header>
+
+    
+      <div class="post-toc" id="post-toc">
+        <h2 class="post-toc-title">Contents</h2>
+        <div class="post-toc-content">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#请求"><span class="toc-text">请求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#响应"><span class="toc-text">响应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#中间件"><span class="toc-text">中间件</span></a></li></ol>
+        </div>
+      </div>
+    
+
+    <div class="post-content">
+      
+        <p>每一个web frame框架都是使用Request和Response模型 laravel也不例外。还记得在路由章节我们的route方法返回了一个字符串，实际上laravel帮你做了封装</p>
+<h2 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h2><p>首先任何一个请求对于laravel来说都是一个Request对象，他是基于$_GET和$_POST等的封装，提供了更多的功能 在action中我们使用依赖注入来获取Request对象</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Route::get(<span class="string">'foo'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(Illuminate\Http\Request $request)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> $request-&gt;fullurl();</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>当然也可以使用app来获取request，app是laravel依赖注入的快捷方法 或者Facades<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$request = app(<span class="string">'request'</span>);</div><div class="line">$url = Request::fullurl();</div></pre></td></tr></table></figure></p>
+<p>Request对象主要的方法有<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$request-&gt;input($name); <span class="comment">// 获取get或者post参数</span></div><div class="line">$request-&gt;cookie($name); <span class="comment">// 获取cookie</span></div><div class="line">$request-&gt;file($name); <span class="comment">// 获取文件</span></div><div class="line">$request-&gt;all(); <span class="comment">// 获取所有</span></div><div class="line">$request-&gt;only([<span class="string">'name1'</span>, <span class="string">'name2'</span>, ...]); <span class="comment">// 获取某些参数</span></div></pre></td></tr></table></figure></p>
+<p>更多方法请查看官方的<a href="https://laravel.com/docs/5.3/requests" target="_blank" rel="external">api</a></p>
+<h2 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h2><p>前面说的laravel对每一个请求都会返回Response类，当你的route返回字符串或者数组的时候laravel会自动构造一个Response，手动构造Response有以下几种方法:</p>
+<ol>
+<li>response()</li>
+<li>redirect()</li>
+<li>view()</li>
+<li>Response::make()</li>
+</ol>
+<p>Response的具体方法请看官方<a href="https://laravel.com/docs/5.3/responses" target="_blank" rel="external">api</a></p>
+<h2 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h2><p>中间件是用来在请求前后对Request和Response做hook处理，下面有一张比较经典的洋葱模型非常形象的表达了中间件的处理过程<br><img src="middleware.png" alt="middleware"></p>
+<p>laravel中一个middleware就是一个实现了handle方法的类，这个方法有两个参数Request实力和一个next的闭包方法 调用next方法进入下一个中间件处理并返回Response实例 如果我想拦截这个请求那么我可以直接返回一个Response实例而不继续调用next<br>下面以一个cookie加密的例子来看一下middleware<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">EncryptCookies</span></span></div><div class="line">&#123;</div><div class="line">    ...</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">($request, Closure $next)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;encrypt($next(<span class="keyword">$this</span>-&gt;decrypt($request)));</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到核心逻辑非常简单 对Requeset进行解密 对Response进行加密</p>
+
+      
+    </div>
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/php/">php</a>
+          
+            <a href="/tags/laravel/">laravel</a>
+          
+        </div>
+
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/01/14/laravel-form-validate/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">laravel表单验证</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/01/07/laravel-route/">
+        <span class="next-text nav-default">laravel路由</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+        </div>  
+      </main>
+
+      <footer id="footer" class="footer">
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">qiu</span>
+  </span>
+</div>
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+
+
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.1.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.0"></script>
+
+  </body>
+</html>
