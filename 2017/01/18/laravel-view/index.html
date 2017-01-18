@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="视图"/>
+
+
+
+
+  <meta name="keywords" content="php,laravel," />
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Qiu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.1.0" />
+
+
+
+<link rel="canonical" href="/2017/01/18/laravel-view/"/>
+
+
+<meta name="description" content="一个完整的web开发框架离不开视图和模板引擎，laravel没有采用目前成熟的twig和smarty而是自己实现了一个blade模板引擎，当然我们也可以自己实现一个ViewEngine。在route中我们可以使用view(&amp;#39;admin.login&amp;#39;)渲染视图 laravel会自动寻找resources/views下的文件，如果使用blade那么扩展名一定要是blade.php
+如果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="视图">
+<meta property="og:url" content="/2017/01/18/laravel-view/index.html">
+<meta property="og:site_name" content="Qiu">
+<meta property="og:description" content="一个完整的web开发框架离不开视图和模板引擎，laravel没有采用目前成熟的twig和smarty而是自己实现了一个blade模板引擎，当然我们也可以自己实现一个ViewEngine。在route中我们可以使用view(&amp;#39;admin.login&amp;#39;)渲染视图 laravel会自动寻找resources/views下的文件，如果使用blade那么扩展名一定要是blade.php
+如果">
+<meta property="og:updated_time" content="2017-01-18T15:35:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="视图">
+<meta name="twitter:description" content="一个完整的web开发框架离不开视图和模板引擎，laravel没有采用目前成熟的twig和smarty而是自己实现了一个blade模板引擎，当然我们也可以自己实现一个ViewEngine。在route中我们可以使用view(&amp;#39;admin.login&amp;#39;)渲染视图 laravel会自动寻找resources/views下的文件，如果使用blade那么扩展名一定要是blade.php
+如果">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.0" />
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a012f1b343df2bf6b74279e6178044ab";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> 视图 · Qiu </title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="header" class="header"><nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+          </a>
+        </li>
+      
+      
+    </ul>
+  
+</nav>
+
+<div class="mobile-navbar">
+  <div class="mobile-header">
+    <div class="mobile-header-logo">
+      <a href="/." class="logo">Qiu</a>
+    </div>
+
+    <div class="mobile-header-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    
+      
+      <a class="mobile-menu-item" href="/">
+        Home
+      </a>
+    
+      
+      <a class="mobile-menu-item" href="/archives/">
+        Archives
+      </a>
+    
+  </nav>
+</div>
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          视图
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          Jan 18, 2017
+        </span>
+      </div>
+    </header>
+
+    
+      <div class="post-toc" id="post-toc">
+        <h2 class="post-toc-title">Contents</h2>
+        <div class="post-toc-content">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#viewcomposers"><span class="toc-text">viewcomposers</span></a></li></ol>
+        </div>
+      </div>
+    
+
+    <div class="post-content">
+      
+        <p>一个完整的web开发框架离不开视图和模板引擎，laravel没有采用目前成熟的twig和smarty而是自己实现了一个blade模板引擎，当然我们也可以自己实现一个ViewEngine。在route中我们可以使用<code>view(&#39;admin.login&#39;)</code>渲染视图 laravel会自动寻找resources/views下的文件，如果使用blade那么扩展名一定要是blade.php</p>
+<p>如果你要修改views的路径 可以在config/view.php里面修改</p>
+<p>blade语法请参考<a href="https://laravel.com/docs/5.3/blade" target="_blank" rel="external">官方文档</a></p>
+<h1 id="viewcomposers"><a href="#viewcomposers" class="headerlink" title="viewcomposers"></a>viewcomposers</h1><p>view composers是当laravel渲染某些view时调用的，比如在你的ServiceProvider里面使用view的composer方法<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 使用基于类的composers...</span></div><div class="line">    view()-&gt;composer(</div><div class="line">        [<span class="string">'admin'</span>, <span class="string">'profile'</span>], <span class="string">'App\Http\ViewComposers\ProfileComposer'</span></div><div class="line">    );</div><div class="line"></div><div class="line">    <span class="comment">// 使用基于闭包的composers...</span></div><div class="line">    view()-&gt;composer(<span class="string">'dashboard'</span>, <span class="function"><span class="keyword">function</span> <span class="params">($view)</span> </span>&#123;&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>也可以使用通配符*来注册全局的composer</p>
+
+      
+    </div>
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/php/">php</a>
+          
+            <a href="/tags/laravel/">laravel</a>
+          
+        </div>
+
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/01/15/laravel-controller/">
+        <span class="next-text nav-default">laravel控制器</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+        </div>  
+      </main>
+
+      <footer id="footer" class="footer">
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">qiu</span>
+  </span>
+</div>
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+
+
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.1.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.0"></script>
+
+  </body>
+</html>
