@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="一个例子了解laravel的command queue mail"/>
+
+
+
+
+  <meta name="keywords" content="php,laravel," />
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Qiu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.1.0" />
+
+
+
+<link rel="canonical" href="/2017/02/01/laravel-commands-queue-mail-example/"/>
+
+
+<meta name="description" content="commands可以通过artisan运行的命令，例如make:controller也叫artisan console 提供了laravel的命令行以及其交互功能
+queue队列可理解为想要延时执行的一些耗时任务 例如邮件，定时统计等 通过将这些任务延时执行来缩短请求的响应时间
+例子这里我们使用一个发送邮件的例子来了大体了解一下这两个功能首先使用artisan make:command SendR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个例子了解laravel的command queue mail">
+<meta property="og:url" content="/2017/02/01/laravel-commands-queue-mail-example/index.html">
+<meta property="og:site_name" content="Qiu">
+<meta property="og:description" content="commands可以通过artisan运行的命令，例如make:controller也叫artisan console 提供了laravel的命令行以及其交互功能
+queue队列可理解为想要延时执行的一些耗时任务 例如邮件，定时统计等 通过将这些任务延时执行来缩短请求的响应时间
+例子这里我们使用一个发送邮件的例子来了大体了解一下这两个功能首先使用artisan make:command SendR">
+<meta property="og:updated_time" content="2017-02-12T10:51:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一个例子了解laravel的command queue mail">
+<meta name="twitter:description" content="commands可以通过artisan运行的命令，例如make:controller也叫artisan console 提供了laravel的命令行以及其交互功能
+queue队列可理解为想要延时执行的一些耗时任务 例如邮件，定时统计等 通过将这些任务延时执行来缩短请求的响应时间
+例子这里我们使用一个发送邮件的例子来了大体了解一下这两个功能首先使用artisan make:command SendR">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.1.0" />
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a012f1b343df2bf6b74279e6178044ab";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+    <title> 一个例子了解laravel的command queue mail · Qiu </title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header id="header" class="header"><nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+          </a>
+        </li>
+      
+      
+    </ul>
+  
+</nav>
+
+<div class="mobile-navbar">
+  <div class="mobile-header">
+    <div class="mobile-header-logo">
+      <a href="/." class="logo">Qiu</a>
+    </div>
+
+    <div class="mobile-header-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    
+      
+      <a class="mobile-menu-item" href="/">
+        Home
+      </a>
+    
+      
+      <a class="mobile-menu-item" href="/archives/">
+        Archives
+      </a>
+    
+  </nav>
+</div>
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          一个例子了解laravel的command queue mail
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          Feb 1, 2017
+        </span>
+      </div>
+    </header>
+
+    
+      <div class="post-toc" id="post-toc">
+        <h2 class="post-toc-title">Contents</h2>
+        <div class="post-toc-content">
+          <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#commands"><span class="toc-text">commands</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#queue"><span class="toc-text">queue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建任务"><span class="toc-text">创建任务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建mail类"><span class="toc-text">创建mail类</span></a></li></ol>
+        </div>
+      </div>
+    
+
+    <div class="post-content">
+      
+        <h3 id="commands"><a href="#commands" class="headerlink" title="commands"></a>commands</h3><p>可以通过artisan运行的命令，例如<code>make:controller</code>也叫artisan console 提供了laravel的命令行以及其交互功能</p>
+<h3 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h3><p>队列可理解为想要延时执行的一些耗时任务 例如邮件，定时统计等 通过将这些任务延时执行来缩短请求的响应时间</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>这里我们使用一个发送邮件的例子来了大体了解一下这两个功能<br>首先使用<code>artisan make:command SendReminderEmail --command=emails:send</code>命令创建一个job<br>生成的文件在<code>app／Console/Commands</code>中 内容如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Console</span>\<span class="title">Commands</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Console</span>\<span class="title">Command</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SendReminderEmail</span> <span class="keyword">extends</span> <span class="title">Command</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * The name and signature of the console command.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@var</span> string</div><div class="line">     */</div><div class="line">    <span class="keyword">protected</span> $signature = <span class="string">'emails:send'</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * The console command description.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@var</span> string</div><div class="line">     */</div><div class="line">    <span class="keyword">protected</span> $description = <span class="string">'Command description'</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Create a new command instance.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> void</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">parent</span>::__construct();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Execute the console command.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> mixed</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">//</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>将其加入到app\Console下的Kernel文件中的$commands数组中<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> $commands = [</div><div class="line">    Commands\SendEmails::class</div><div class="line">];</div></pre></td></tr></table></figure></p>
+<p>然后运行artisan的时候就可以看到emails:send 方法了<br>handle方法是要执行的逻辑部分<br>在这里 我们只简单的使用dispatch方法派发一个任务</p>
+<h4 id="创建任务"><a href="#创建任务" class="headerlink" title="创建任务"></a>创建任务</h4><p>laravel提供了几种方式用来保存队列: sync, db, redis, Amazon SQS等 其中sync是开发时使用的只能用来同步调试 这里我们用db<br>运行<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">php artisan queue:table</div><div class="line">php artisan queue:failed-table</div><div class="line">php artisan migrate</div></pre></td></tr></table></figure></p>
+<p>生成队列和失败队列两张表<br>在config/queue.php或者.env中修改QUEUE_DRIVER为database<br>运行<code>php artisan make:job SendReminderEmail</code>会在app\Jobs下生成任务文件 内容如下:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Jobs</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Bus</span>\<span class="title">Queueable</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">SerializesModels</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">InteractsWithQueue</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Contracts</span>\<span class="title">Queue</span>\<span class="title">ShouldQueue</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Mail</span>\<span class="title">Reminder</span>;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SendReminderEmail</span> <span class="keyword">implements</span> <span class="title">ShouldQueue</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">use</span> <span class="title">InteractsWithQueue</span>, <span class="title">Queueable</span>, <span class="title">SerializesModels</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Create a new job instance.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> void</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">//</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Execute the job.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> void</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>同样是在handle中定义要执行的代码<br>我们将Command的handle方法改成<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    dispatch(<span class="keyword">new</span> SendReminderEmail());</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="创建mail类"><a href="#创建mail类" class="headerlink" title="创建mail类"></a>创建mail类</h3><p>运行<code>php artisan make:mail Reminder</code> 会在app/Mail下生成Reminder.php文件 我们将其内容修改为<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Mail</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Bus</span>\<span class="title">Queueable</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Mail</span>\<span class="title">Mailable</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">SerializesModels</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Contracts</span>\<span class="title">Queue</span>\<span class="title">ShouldQueue</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Reminder</span> <span class="keyword">extends</span> <span class="title">Mailable</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">use</span> <span class="title">Queueable</span>, <span class="title">SerializesModels</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Create a new message instance.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> void</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">//</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Build the message.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> $this</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">build</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;view(<span class="string">'emails.reminder'</span>)-&gt;with([</div><div class="line">            <span class="string">'test'</span> =&gt; <span class="string">'world'</span></div><div class="line">        ]);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>新建文件resources\views\emails\remider.blade.php 内容为<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">    hello &#123;&#123; $test &#125;&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>创建完成后别忘了修改你的mail配置文件</p>
+<p>修改SendReminderEmail这个job的handle方法<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Contracts</span>\<span class="title">Mail</span>\<span class="title">Mailer</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Mail</span>\<span class="title">Reminder</span>;</div><div class="line">...</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">(Mailer $mailer)</span></span></div><div class="line">&#123;</div><div class="line">    $mailer-&gt;to(<span class="string">'example@qq.com'</span>)-&gt;send(<span class="keyword">new</span> Reminder());</div><div class="line">&#125;</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>好了 下面先运行 <code>php artisan emails.send</code> 就会在队列中添加一个文件<br>然后在运行 <code>php artisan queue:work</code> 会在运行队列中的任务</p>
+<p>通过<code>php artisan queue:work --daemon</code> 可以监听任务 同时可以配置超时和重试等功能</p>
+
+      
+    </div>
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/php/">php</a>
+          
+            <a href="/tags/laravel/">laravel</a>
+          
+        </div>
+
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/01/18/laravel-view/">
+        <span class="next-text nav-default">视图</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+        </div>  
+      </main>
+
+      <footer id="footer" class="footer">
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">qiu</span>
+  </span>
+</div>
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+
+
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.1.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.1.0"></script>
+
+  </body>
+</html>
